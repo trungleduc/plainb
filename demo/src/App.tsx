@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import Editor from '@monaco-editor/react'
 import { parsePy, parseMd, parseSphinxGallery } from 'plainb'
 
 // ---------------------------------------------------------------------------
@@ -152,64 +153,11 @@ plt.show()
 # calibration handles both but may require more data.
 `
 
-// ---------------------------------------------------------------------------
-// JSON syntax highlighter (returns array of spans)
-// ---------------------------------------------------------------------------
-
-type Token = { kind: 'key' | 'str' | 'num' | 'bool' | 'null' | 'punct' | 'ws'; text: string }
-
-function tokenize(json: string): Token[] {
-  const tokens: Token[] = []
-  let i = 0
-
-  while (i < json.length) {
-    // whitespace
-    const wsMatch = json.slice(i).match(/^[\s]+/)
-    if (wsMatch) { tokens.push({ kind: 'ws', text: wsMatch[0] }); i += wsMatch[0].length; continue }
-
-    // string
-    if (json[i] === '"') {
-      let j = i + 1
-      while (j < json.length) {
-        if (json[j] === '\\') { j += 2; continue }
-        if (json[j] === '"') { j++; break }
-        j++
-      }
-      const text = json.slice(i, j)
-      // peek ahead (skip whitespace) to see if followed by ':'
-      let k = j
-      while (k < json.length && (json[k] === ' ' || json[k] === '\t')) k++
-      const kind = json[k] === ':' ? 'key' : 'str'
-      tokens.push({ kind, text }); i = j; continue
-    }
-
-    // number
-    const numMatch = json.slice(i).match(/^-?\d+(\.\d+)?([eE][+-]?\d+)?/)
-    if (numMatch) { tokens.push({ kind: 'num', text: numMatch[0] }); i += numMatch[0].length; continue }
-
-    // literals
-    if (json.slice(i, i + 4) === 'true')  { tokens.push({ kind: 'bool', text: 'true'  }); i += 4; continue }
-    if (json.slice(i, i + 5) === 'false') { tokens.push({ kind: 'bool', text: 'false' }); i += 5; continue }
-    if (json.slice(i, i + 4) === 'null')  { tokens.push({ kind: 'null', text: 'null'  }); i += 4; continue }
-
-    // punct
-    tokens.push({ kind: 'punct', text: json[i] }); i++
-  }
-
-  return tokens
-}
-
-function HighlightedJSON({ json }: { json: string }) {
-  const tokens = useMemo(() => tokenize(json), [json])
-  return (
-    <div className="output">
-      {tokens.map((t, i) =>
-        t.kind === 'ws'
-          ? t.text
-          : <span key={i} className={t.kind}>{t.text}</span>
-      )}
-    </div>
-  )
+const INPUT_LANGUAGE: Record<Format, string> = {
+  py: 'python',
+  md: 'markdown',
+  myst: 'markdown',
+  sg: 'python',
 }
 
 // ---------------------------------------------------------------------------
@@ -224,6 +172,16 @@ const LABELS: Record<Format, string> = { py: '.py percent', md: '.md classic', m
 export default function App() {
   const [format, setFormat] = useState<Format>('py')
   const [input, setInput] = useState(PY_SAMPLE)
+  const [dark, setDark] = useState(false)
+
+  const monacoTheme = dark ? 'vs-dark' : 'vs'
+
+  function toggleTheme() {
+    setDark(d => {
+      document.documentElement.setAttribute('data-theme', d ? 'light' : 'dark')
+      return !d
+    })
+  }
 
   function switchFormat(f: Format) {
     setFormat(f)
@@ -267,6 +225,7 @@ export default function App() {
             </button>
           ))}
         </div>
+        <button className="theme-btn" onClick={toggleTheme}>{dark ? '☀ Light' : '☾ Dark'}</button>
         <button className="download-btn" onClick={download} disabled={!!error}>
           ↓ Download .ipynb
         </button>
@@ -275,19 +234,29 @@ export default function App() {
       <div className="panels">
         <div className="panel">
           <div className="panel-header">Input</div>
-          <textarea
-            className="editor"
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            spellCheck={false}
-          />
+          <div className="editor-wrap">
+            <Editor
+              value={input}
+              language={INPUT_LANGUAGE[format]}
+              theme={monacoTheme}
+              onChange={v => setInput(v ?? '')}
+              options={{ minimap: { enabled: false }, fontSize: 13, scrollBeyondLastLine: false, wordWrap: 'on' }}
+            />
+          </div>
         </div>
 
         <div className="panel">
           <div className="panel-header">nbformat 4 JSON</div>
           {error
             ? <div className="error-banner">{error}</div>
-            : <HighlightedJSON json={json} />
+            : <div className="editor-wrap">
+                <Editor
+                  value={json}
+                  language="json"
+                  theme={monacoTheme}
+                  options={{ readOnly: true, minimap: { enabled: false }, fontSize: 13, scrollBeyondLastLine: false }}
+                />
+              </div>
           }
         </div>
       </div>
