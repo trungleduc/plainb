@@ -1,12 +1,13 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync, mkdirSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { parseSphinxGallery } from "../src/parseSphinxGallery.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+mkdirSync(resolve(__dirname, "outputs"), { recursive: true });
 const text = readFileSync(
   resolve(__dirname, "inputs/calibration_curves.py"),
   "utf8"
