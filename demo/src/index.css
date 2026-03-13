@@ -1,0 +1,154 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, sans-serif;
+  background: #0f1117;
+  color: #e2e8f0;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+
+/* ── Toolbar ── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: #1a1d27;
+  border-bottom: 1px solid #2d3148;
+  flex-shrink: 0;
+}
+
+.toolbar h1 {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #a5b4fc;
+}
+
+.toolbar .sep { flex: 1; }
+
+.format-tabs {
+  display: flex;
+  gap: 2px;
+  background: #0f1117;
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.format-tabs button {
+  padding: 4px 14px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.format-tabs button.active {
+  background: #3730a3;
+  color: #e0e7ff;
+}
+
+.download-btn {
+  padding: 4px 14px;
+  border: 1px solid #3730a3;
+  border-radius: 4px;
+  background: transparent;
+  color: #a5b4fc;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.download-btn:hover:not(:disabled) {
+  background: #3730a3;
+  color: #e0e7ff;
+}
+
+.download-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ── Main panels ── */
+.panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  flex: 1;
+  min-height: 0;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.panel:first-child {
+  border-right: 1px solid #2d3148;
+}
+
+.panel-header {
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  background: #141720;
+  border-bottom: 1px solid #2d3148;
+  flex-shrink: 0;
+}
+
+/* ── Editor ── */
+.editor {
+  flex: 1;
+  width: 100%;
+  resize: none;
+  background: #0f1117;
+  color: #e2e8f0;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 16px;
+  border: none;
+  outline: none;
+  tab-size: 4;
+}
+
+/* ── Output ── */
+.output {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  background: #0f1117;
+  white-space: pre;
+}
+
+.output .key    { color: #93c5fd; }
+.output .str    { color: #86efac; }
+.output .num    { color: #fbbf24; }
+.output .bool   { color: #f472b6; }
+.output .null   { color: #94a3b8; }
+.output .punct  { color: #64748b; }
+
+.error-banner {
+  padding: 10px 14px;
+  background: #450a0a;
+  color: #fca5a5;
+  font-size: 12px;
+  border-bottom: 1px solid #7f1d1d;
+  font-family: monospace;
+}

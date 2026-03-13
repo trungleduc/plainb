@@ -1,0 +1,23 @@
+{
+  "name": "plainb",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Convert plain text (.py percent format, .md classic/MyST) to Jupyter nbformat 4 JSON",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "files": ["dist"],
+  "license": "MIT",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test --import tsx test/*.test.ts",
+    "demo": "npm run --prefix demo dev",
+    "demo:build": "npm run --prefix demo build"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.8.0"
+  }
+}
