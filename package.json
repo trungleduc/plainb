@@ -10,9 +10,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/trungleduc/plainb"
+    "url": "https://github.com/notebook-link/plainb"
   },
-  "homepage": "https://github.com/trungleduc/plainb",
+  "homepage": "https://github.com/notebook-link/plainb",
   "license": "MIT",
   "scripts": {
     "build": "tsc",

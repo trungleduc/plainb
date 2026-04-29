@@ -133,7 +133,7 @@ type Cell            = CodeCell | MarkdownCell | RawCell
 ## Demo
 
 ```sh
-git clone https://github.com/trungleduc/plainb
+git clone https://github.com/notebook-link/plainb
 cd plainb
 npm install
 npm run demo
