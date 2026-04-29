@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/notebook-link/plainb/compare/v1.1.0...v1.2.0) (2026-04-29)
+
+
+### Features
+
+* add notebook serializer ([#1](https://github.com/notebook-link/plainb/issues/1)) ([8306c75](https://github.com/notebook-link/plainb/commit/8306c75e28fdf63422caa9e24cd546b0c4bcaf8a))
+
 # [1.1.0](https://github.com/notebook-link/plainb/compare/v1.0.0...v1.1.0) (2026-03-15)
 
 
